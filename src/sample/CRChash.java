@@ -5,14 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Vitaly on 10.04.2016.
- */
 public class CRChash {
     List<Byte> message;
     List<Byte> parentFunc;
     int lengthParentFunc;
     public Map<String, Integer> counts;
+
+    public CRChash(){}
 
     public CRChash(byte[] messageBits){
         message = new ArrayList<>();

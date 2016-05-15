@@ -7,6 +7,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sample.lab6.ElgamalSubscribe;
+import sample.lab6.Tuple3;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -47,6 +49,9 @@ public class Controller {
     @FXML
     TextField textField11;
 
+    @FXML
+    TextField textFieldGamal;
+
 
     @FXML
     TextArea textArea1;
@@ -55,6 +60,8 @@ public class Controller {
     TextArea textArea2;
 
     XORCipher cipher;
+
+    ElgamalSubscribe suber;
 
     public void onClick(){
         textArea1.clear();
@@ -233,5 +240,30 @@ public class Controller {
         for (Map.Entry<String, String> pair : pairs.entrySet()) {
             textArea2.appendText(pair.getKey() + " " + pair.getValue() + "\n");
         }
+    }
+
+
+    public void createSchema(ActionEvent actionEvent) {
+        String parentFunc = textField11.getText();
+        Tuple3<String, String, String> init = new Tuple3<>(textFieldGamal.getText().split(", "));
+        suber = new ElgamalSubscribe(Integer.parseInt(init.x), Integer.parseInt(init.y)
+                , Integer.parseInt(init.d), parentFunc);
+        textField11.clear();
+        textFieldGamal.clear();
+    }
+
+    public void subscribeMessage(ActionEvent actionEvent){
+        String result = suber.subscribeMessage(textFieldGamal.getText()).toString();
+        textFieldGamal.clear();
+        textFieldGamal.setText(result);
+    }
+
+    public void checkMessage(ActionEvent actionEvent) {
+        String[] input = textFieldGamal.getText().split(", ");
+        if (input.length != 3)
+            throw new IllegalArgumentException("Incorrect params");
+        textFieldGamal.setText(
+                suber.checkSubscribingMessage(
+                        new Tuple3<>(input[0], Integer.parseInt(input[1]), Integer.parseInt(input[2]))).toString());
     }
 }

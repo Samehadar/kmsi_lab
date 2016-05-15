@@ -5,28 +5,36 @@ import sample.CRChash;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by Vitaly on 03.05.2016.
- */
 public class ElgamalSubscribe {
 
     private ElgamalShema elgamalShema;
     private CRChash myHash;
 
-    private String message;
     private String parentFunc;  //for CRC
 
     public Map<String, Integer> openKey;
     public Integer closeKey;
 
 
-    public ElgamalSubscribe(){
-
+    public ElgamalSubscribe(Integer p, Integer g, Integer x, String parentFunc){
+        elgamalShema = new ElgamalShema(p, g, x);
+        this.parentFunc = parentFunc;
+        openKey = elgamalShema.getOpenKey();
+        closeKey = elgamalShema.getCloseKey();
     }
 
-    public void subscribeMessage(){
+    /*
+    Подпись сообщений
+Для подписи сообщения ~M выполняются следующие операции:
+
+Вычисляется дайджест сообщения ~M: ~m = h(M).
+Выбирается случайное число ~1< k < p-1 взаимно простое с ~p - 1 и вычисляется ~r = g^k\,\bmod\,p.
+Вычисляется число  s \, \equiv \, (m-x r)k^{-1} \pmod{p-1}.
+Подписью сообщения ~M является пара \left( r,s \right).
+     */
+    public Tuple3<String, Integer, Integer> subscribeMessage(String subscribingMessage){
         //m  = h(M)
-        Integer messageDigest = getMessageDigest(message);
+        Integer messageDigest = getMessageDigest(subscribingMessage);
 
         //1 < k < p - 1
         Integer k;
@@ -44,15 +52,43 @@ public class ElgamalSubscribe {
         Integer s = ((messageDigest - closeKey * r) * kInvert) % (openKey.get("p") - 1);
 
         //sub is (r, s)
+        return new Tuple3<>(subscribingMessage, r, s);
     }
 
+/*
+Проверка подписи
+Зная открытый ключ \left( p,g,y \right), подпись \left( r,s \right) сообщения ~M проверяется следующим образом:
 
-    public void checkSubscribingMessage(String checkedMessage){
+Проверяется выполнимость условий: ~0<r<p и ~0<s<p-1. Если хотя бы одно из них не выполняется,то подпись считается неверной.
+Вычисляется дайджест ~m = h(M).
+Подпись считается верной, если выполняется сравнение:
+~(y^r r^s)mod{p} \equiv g^m \pmod{p}.
+ */
+    /*
+    Method is checked received message
+    @param checkedMessage - checked message, r, s
+    @return - true or false
+     */
+    public Boolean checkSubscribingMessage(Tuple3<String, Integer, Integer> checkedMessage){
+        if (checkedMessage.y <= 0 || checkedMessage.y >= openKey.get("p"))
+            return false;
+        if (checkedMessage.d <= 0 || checkedMessage.d >= openKey.get("p") - 1)
+            return false;
 
+        Integer messageDigest = getMessageDigest(checkedMessage.x);
+
+        Integer left = elgamalShema.exp(
+                elgamalShema.exp(openKey.get("y"), checkedMessage.y, openKey.get("p"))
+                * elgamalShema.exp(checkedMessage.y, checkedMessage.d, openKey.get("p"))
+                , 1, openKey.get("p"));
+        Integer right = elgamalShema.exp(openKey.get("g"), messageDigest, openKey.get("p"));
+
+        return left.equals(right);
     }
 
     public Integer getMessageDigest(String message){
-        myHash = new CRChash(null);
+        myHash = new CRChash();
+        myHash.setParentFunc(parentFunc);
         myHash.setMessage(message);
         String hash = myHash.getCRC();
         return Integer.parseInt(hash, 2);
@@ -72,7 +108,7 @@ public class ElgamalSubscribe {
     //ax+by - for x,y return (a, b, GCD(x,y)); p.s. b < 0
     public Tuple3<Integer, Integer, Integer> gcdExtended(int a, int b, Tuple3<Integer, Integer, Integer> tuple) {
         if (a == 0) {
-            return new Tuple3<Integer, Integer, Integer>(0, 1, b);
+            return new Tuple3<>(0, 1, b);
         }
         Tuple3<Integer, Integer, Integer> tuple1 = gcdExtended(b%a, a, new Tuple3<>(0, 0, 0));
         tuple.x = tuple1.y - (b / a) * tuple1.x;

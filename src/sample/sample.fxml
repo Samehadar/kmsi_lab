@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
@@ -40,7 +35,11 @@
       <Button fx:id="button6" layoutX="501.0" layoutY="245.0" mnemonicParsing="false" onAction="#saveEToFile" text="Save E Text" />
       <Button fx:id="button7" layoutX="377.0" layoutY="245.0" mnemonicParsing="false" onAction="#saveDToFile" text="Save D Text" />
       <Button fx:id="buttonCRC" layoutX="46.0" layoutY="296.0" mnemonicParsing="false" onAction="#getCRC" prefHeight="25.0" prefWidth="68.0" text="get CRC" />
-      <TextField fx:id="textField11" editable="false" layoutX="6.0" layoutY="321.0" promptText="CRC" />
+      <TextField fx:id="textField11" layoutX="6.0" layoutY="321.0" promptText="CRC" />
       <Label layoutX="122.0" layoutY="276.0" text="= parent polynomial(x^2+x^1+1)" />
+      <Button fx:id="buttonCreateSchema" layoutX="511.0" layoutY="309.0" mnemonicParsing="false" onAction="#createSchema" text="new schema" />
+      <Button fx:id="buttonCheckSub" layoutX="543.0" layoutY="359.0" mnemonicParsing="false" onAction="#checkMessage" text="check" />
+      <TextField fx:id="textFieldGamal" layoutX="353.0" layoutY="334.0" />
+      <Button fx:id="buttonSubscribeMessage" layoutX="525.0" layoutY="334.0" mnemonicParsing="false" onAction="#subscribeMessage" text="Subscribe" />
    </children>
 </AnchorPane>
