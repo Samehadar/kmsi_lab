@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <Button fx:id="button2" layoutX="394.0" layoutY="144.0" mnemonicParsing="false" onAction="#clickEncryption" text="Enctyprion" />
+      <TextArea fx:id="textArea2" layoutX="394.0" prefHeight="136.0" prefWidth="200.0" />
+      <Button fx:id="button1" layoutX="38.0" layoutY="87.0" mnemonicParsing="false" onAction="#createRSACipher" prefHeight="25.0" prefWidth="149.0" text="Create RSA Cipher" />
+      <TextField fx:id="textField1" layoutX="38.0" layoutY="19.0" />
+      <Label layoutX="19.0" layoutY="23.0" text="p:" />
+      <Label layoutX="19.0" layoutY="57.0" text="q:" />
+      <Label layoutX="480.0" layoutY="148.0" text=":qop:" />
+      <TextField fx:id="textField2" layoutX="38.0" layoutY="53.0" />
+      <TextArea fx:id="textArea1" editable="false" layoutX="38.0" layoutY="118.0" prefHeight="149.0" prefWidth="149.0" />
+      <Button fx:id="button3" layoutX="519.0" layoutY="144.0" mnemonicParsing="false" onAction="#clickDecryption" text="Decryption" />
+      <TextArea fx:id="textArea3" editable="false" layoutX="394.0" layoutY="176.0" prefHeight="136.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>
